@@ -18,33 +18,43 @@ public class HandyMusician {
   }
 
   public static void determineChords(String key) {
-    String[] finalNotes = new String[]{key, null, null, null};
+
+    // List of chords
+    String[] finalChords = new String[7];
+    // List of indexes that make up the Major Triad
+    int[] majorTriad = new int[]{0, 3, 4};
+    // List of indexes that make up the pop chord progression
+    int[] popProg = new int[]{0, 4, 5, 3};
+
+    // Build list of chords
     int indexOfRoot = Arrays.asList(ALL_NOTES).indexOf(key);
-    int indexOfIV = indexCorrection(indexOfRoot + 5);
-    int indexOfV = indexCorrection(indexOfRoot + 7);
-    int indexOfvi = indexCorrection(indexOfRoot + 9);
-    
-    finalNotes[1] = ALL_NOTES[indexOfIV];
-    finalNotes[2] = ALL_NOTES[indexOfV];
-    finalNotes[3] = ALL_NOTES[indexOfvi];
+    finalChords[0] = ALL_NOTES[indexOfRoot];
+    finalChords[1] = ALL_NOTES[indexCorrection(indexOfRoot + 2)] + "m";
+    finalChords[2] = ALL_NOTES[indexCorrection(indexOfRoot + 4)] + "m";
+    finalChords[3] = ALL_NOTES[indexCorrection(indexOfRoot + 5)];
+    finalChords[4] = ALL_NOTES[indexCorrection(indexOfRoot + 7)];
+    finalChords[5] = ALL_NOTES[indexCorrection(indexOfRoot + 9)] + "m";
+    finalChords[6] = ALL_NOTES[indexCorrection(indexOfRoot + 11)] + "mdim";
 
+    // Print out all Major Scale chords
+    System.out.println("\nAll Chords: \nI\tii\tiii\tIV\tV\tvi\tviio");
+    for(String chord : finalChords) {
+      System.out.print(chord + "\t");
+    }
+    System.out.println("");
+
+    // Print Major Triad
     System.out.println("\nMajor Triad: \nI\tIV\tV");
-    for(int i = 0; i < (finalNotes.length - 1); i++) {
-      System.out.print(finalNotes[i] + "\t");
+    for(int i : majorTriad) {
+      System.out.print(finalChords[i] + "\t");
     }
+    System.out.println("");
 
-    System.out.println("\n\nPop Chords (play I-V-vi-IV): \nI\tIV\tV\tvi");
-    int count = 0;
-    for(String note : finalNotes) {
-      String lineEnd = "";
-      if(count < 3) {
-        lineEnd = "\t";
-        count++;
-      } else {
-        lineEnd = "m\n";
-      }
-      System.out.print(note + lineEnd);
+    System.out.println("\nPop Chord Progression: \nI\tV\tvi\tIV");
+    for(int i : popProg) {
+      System.out.print(finalChords[i] + "\t");
     }
+    System.out.println("");
   }
 
   public static void determineKeySignature(String key) {
