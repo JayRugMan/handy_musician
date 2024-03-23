@@ -4,7 +4,7 @@ import java.util.Arrays;
 public class HandyMusician {
 
   private static final String[] ALL_NOTES = new String[] {
-    "a", "a#", "b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#"
+    "A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"
   };
 
   public static int indexCorrection(int index) {
@@ -71,7 +71,7 @@ public class HandyMusician {
 
     while(true) {
       System.out.print("Enter the musical key: ");
-      key = scanner.nextLine();
+      key = scanner.nextLine().toUpperCase();
       if(Arrays.asList(ALL_NOTES).contains(key)) {
         scanner.close();
         return key;
