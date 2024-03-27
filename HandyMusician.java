@@ -143,6 +143,7 @@ public class HandyMusician {
       } else if(inputStr.charAt(1) == 'B') {
         translatedString = inputStr.charAt(0) + "♭";
       } 
+      System.out.println("\nKey: " + translatedString);
       translatedString = sharpFlatCombine(translatedString);
     } else {
       translatedString = inputStr;
@@ -152,16 +153,15 @@ public class HandyMusician {
   }
 
 
-  public static String getKeyRoot() {
-    Scanner scanner = new Scanner(System.in);
-    String key;
+  public static String getKeyRoot(Scanner scanner) {
+    // User prompted for key root note
+    // Returns the key root note
 
     while(true) {
       System.out.print("Enter the musical key: ");
-      key = scanner.nextLine().toUpperCase();
+      String key = scanner.nextLine().toUpperCase();
       key = sharpFlatTranslate(key);
       if(Arrays.asList(ALL_NOTES).contains(key)) {
-        scanner.close();
         return key;
       } else {
         System.out.println("No key of \"" + key + "\" was found");
@@ -170,32 +170,34 @@ public class HandyMusician {
   }
 
 
-  public static String getRootFromSig() {
+  public static String getRootFromSig(Scanner scanner) {
     // Takes signature (number of sharps or flats) and returns a key
 
-    Scanner scanner = new Scanner(System.in);
     String menu = "Enter number of sharps (n#) or number of flats (nb): ";
-    String sig;
     char sharpFlat;
     String key;
     
     while(true) {
       System.out.print(menu);
-      sig = scanner.nextLine().toUpperCase();
-      sig = sharpFlatTranslate(sig);
-      sharpFlat = sig.charAt(1);
+      String sig = scanner.nextLine().toUpperCase();
+      //JH sig = sharpFlatTranslate(sig);
       if(sig.length() == 2) {  // Make sure input is only 2 characters
+        sharpFlat = sig.charAt(1);
         try {
           int num = Integer.parseInt(sig.charAt(0) + "");  // Make sure first character is an integer
           if(num >= 0 && num <= 7) {  // Make sure initial integer is 0-7
-            if(sharpFlat == '♯') {
+            if(sharpFlat == '#') {
               key = SHARP_SIGS[num];
-              scanner.close();
+              System.out.println("\nKey: " + key);
+              key = sharpFlatCombine(key);
               return key;
-            } else if(sharpFlat == '♭') {
+              //JH return sharpFlatTranslate(key);
+            } else if(sharpFlat == 'B') {
               key = FLAT_SIGS[num];
-              scanner.close();
+              System.out.println("\nKey: " + key);
+              key = sharpFlatCombine(key);
               return key;
+              //JH return sharpFlatTranslate(key);
             } else {  // If neither ♯ or ♭
               System.out.println("Didn't recognize \"" + sharpFlat + "\"");
             }
@@ -206,15 +208,15 @@ public class HandyMusician {
           System.out.println("The first character should be an integer");
         }
       } else {
-        System.out.println("Improper input");
+        System.out.println("Improper input - expected 2 characters and no space");
       }
     }
   }
 
 
-  public static int getOption() {
+  public static int getOption(Scanner scanner) {
     // Presents an initial menu and takes an option to determine whether user has root note or signature
-    Scanner scanner = new Scanner(System.in);
+
     int opt;
     String menu = "Do you have 1) the root note; or 2) the key signature (number of #'s or b's): ";
 
@@ -225,7 +227,6 @@ public class HandyMusician {
       try {
         opt = Integer.parseInt(input);
         if(opt == 1 || opt == 2) {
-          scanner.close();
           return opt;
         } else {
           System.out.println("Valid options are 1 or 2");
@@ -240,16 +241,31 @@ public class HandyMusician {
 
   public static void main(String[] args) {
     
-    String musicalKey = "C";
-    int option = getOption();
+    Scanner scanner = new Scanner(System.in);
+    String musicalKey;
+    int option = getOption(scanner);
+  
+//JH    if(option == 1) {
+//JH      musicalKey = getKeyRoot(scanner);
+//JH    } else if(option == 2) {
+//JH      musicalKey = getRootFromSig(scanner);
+//JH    } else {
+//JH      musicalKey = "C";
+//JH    }
+
     switch(option) {
       case 1:
-        musicalKey = getKeyRoot();
+        musicalKey = getKeyRoot(scanner);
         break;
       case 2:
-        musicalKey = getRootFromSig();
+        musicalKey = getRootFromSig(scanner);
+        break;
+      default:
+        musicalKey = "C";
         break;
     }
+
+    scanner.close();
     
     determineChords(musicalKey);
     determineKeySignature(musicalKey);
